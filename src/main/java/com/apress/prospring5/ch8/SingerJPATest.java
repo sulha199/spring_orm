@@ -1,6 +1,8 @@
 package com.apress.prospring5.ch8;
 
 import com.apress.prospring5.ch8.config.JpaConfig;
+import com.apress.prospring5.ch8.entities.Album;
+import com.apress.prospring5.ch8.entities.Instrument;
 import com.apress.prospring5.ch8.entities.Singer;
 import com.apress.prospring5.ch8.service.SingerService;
 import org.junit.After;
@@ -35,6 +37,31 @@ public class SingerJPATest {
             System.out.println(singer.toString());
         }
     }
+
+    @Test
+    public void testFindAllWithAlbum(){
+        List<Singer> singers = singerService.findAllWithAlbum();
+        assertEquals(3, singers.size());
+        listSingersWithAlbum(singers);
+    }
+    private static void listSingersWithAlbum(List<Singer> singers) {
+        System.out.println(" ---- Listing singers with instruments:");
+        for (Singer singer : singers) {
+            System.out.println(singer.toString());
+            if (singer.getAlbums() != null) {
+                for (Album album :
+                        singer.getAlbums()) {
+                    System.out.println("\t" + album.toString());
+                }
+            }
+            if (singer.getInstruments() != null) {
+                for (Instrument instrument : singer.getInstruments()) {
+                    System.out.println("\tInstrument: " + instrument.getInstrumentId());
+                }
+            }
+        }
+    }
+
     @After
     public void tearDown(){
         ctx.close();

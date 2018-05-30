@@ -39,7 +39,9 @@ public class SingerServiceImpl implements SingerService {
     @Override
     public List<Singer> findAllWithAlbum() {
 //        throw new NotImplementedException("findAllWithAlbum");
-        throw new NotImplementedException();
+//        throw new NotImplementedException();
+        List<Singer> singers = em.createNamedQuery(Singer.FIND_ALL_WITH_ALBUM, Singer.class).getResultList();
+        return singers;
     }
 
     @Transactional(readOnly=true)
