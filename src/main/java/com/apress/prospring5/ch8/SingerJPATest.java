@@ -62,6 +62,13 @@ public class SingerJPATest {
         }
     }
 
+    @Test
+    public void testFindById(){
+        Singer singer = singerService.findById(1l);
+        assertNotNull(singer);
+        System.out.println(singer.toString());
+    }
+
     @After
     public void tearDown(){
         ctx.close();
