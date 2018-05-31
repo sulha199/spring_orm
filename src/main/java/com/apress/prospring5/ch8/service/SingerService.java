@@ -9,4 +9,5 @@ public interface SingerService {
     Singer save(Singer singer);
     void delete(Singer singer);
     List<Singer> findAllByNativeQuery();
+    List<Singer> findByCriteriaQuery(String firstName, String lastName);
 }

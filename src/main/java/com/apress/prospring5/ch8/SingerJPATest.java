@@ -30,7 +30,7 @@ public class SingerJPATest {
     }
     @Test
     public void testFindAll(){
-        List<Singer> singers = singerService.findAll();
+        List<Singer> singers = singerService.findAllByNativeQuery();
         assertEquals(3, singers.size());
         listSingers(singers);
     }
@@ -63,6 +63,13 @@ public class SingerJPATest {
                 }
             }
         }
+    }
+
+    @Test
+    public void tesFindByCriteriaQuery(){
+        List<Singer> singers = singerService.findByCriteriaQuery("BB", "King");
+        assertEquals(1, singers.size());
+        listSingersWithAlbum(singers);
     }
 
     @Test

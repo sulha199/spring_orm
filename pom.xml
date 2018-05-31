@@ -18,6 +18,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 
@@ -102,6 +103,13 @@
             <groupId>org.hibernate.javax</groupId>
             <artifactId>persistance</artifactId>
             <version>RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>RELEASE</version>
+            <scope>provided</scope>
         </dependency>
 
     </dependencies>

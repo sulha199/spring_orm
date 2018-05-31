@@ -1,5 +1,6 @@
 package com.apress.prospring5.ch8.service;
 
+import com.apress.prospring5.ch8.entities.Singer_;
 import com.apress.prospring5.ch8.entities.Singer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +11,7 @@ import java.util.List;
 import javax.persistence.PersistenceContext;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import javax.persistence.criteria.*;
 
 @Service("jpaSingerService")
 @Repository
@@ -78,7 +77,34 @@ public class SingerServiceImpl implements SingerService {
     @Transactional(readOnly=true)
     @Override
     public List<Singer> findAllByNativeQuery() {
-        throw new NotImplementedException();
-//        throw new NotImplementedException("findAllByNativeQuery");
+        return em.createNativeQuery(ALL_SINGER_NATIVE_QUERY,
+                "singerResult").getResultList();
+    }
+
+    @Transactional(readOnly=true)
+    @Override
+    public List<Singer> findByCriteriaQuery(String firstName, String lastName) {
+        logger.info("Finding singer for firstName: " + firstName
+                + " and lastName: " + lastName);
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Singer> criteriaQuery = cb.createQuery(Singer.class);
+        Root<Singer> singerRoot = criteriaQuery.from(Singer.class);
+        singerRoot.fetch(Singer_.albums, JoinType.LEFT);
+        singerRoot.fetch(Singer_.instruments, JoinType.LEFT);
+        criteriaQuery.select(singerRoot).distinct(true);
+
+        Predicate criteria = cb.conjunction();
+        if (firstName != null) {
+            Predicate p = cb.equal(singerRoot.get(Singer_.firstName),
+                    firstName);
+            criteria = cb.and(criteria, p);
+        }
+        if (lastName != null) {
+            Predicate p = cb.equal(singerRoot.get(Singer_.lastName),
+                    lastName);
+            criteria = cb.and(criteria, p);
+        }
+        criteriaQuery.where(criteria);
+        return em.createQuery(criteriaQuery).getResultList();
     }
 }
