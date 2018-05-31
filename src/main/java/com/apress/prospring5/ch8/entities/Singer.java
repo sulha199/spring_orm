@@ -115,6 +115,13 @@ public class Singer implements Serializable {
         this.birthDate = birthDate;
     }
 
+    public boolean addAlbum(Album album) {
+        album.setSinger(this);
+        return getAlbums().add(album);
+    }
+    public void removeAlbum(Album album) {
+        getAlbums().remove(album);
+    }
     public Set<Album> getAlbums() {
         return albums;
     }
