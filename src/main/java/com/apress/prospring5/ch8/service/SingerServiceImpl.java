@@ -58,20 +58,21 @@ public class SingerServiceImpl implements SingerService {
     @Override
     public Singer save(Singer singer) {
         if (singer.getId() == null) {
-            logger.info("Inserting new singer");
+            System.out.println("Inserting new singer");
             em.persist(singer);
         } else {
             em.merge(singer);
-            logger.info("Updating existing singer");
+            System.out.println("Updating existing singer");
         }
-        logger.info("Singer saved with id: " + singer.getId());
+        System.out.println("Singer saved with id: " + singer.getId());
         return singer;
     }
 
     @Override
     public void delete(Singer singer) {
-        throw new NotImplementedException();
-//        throw new NotImplementedException("delete");
+        Singer mergedSinger = em.merge(singer);
+        em.remove(mergedSinger);
+        System.out.println("Singer with id: " + singer.getId() + " deleted successfully");
     }
 
     @Transactional(readOnly=true)
